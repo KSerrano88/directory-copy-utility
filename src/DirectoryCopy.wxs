@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <Product
+    Id="*"
+    Name="Directory Copy Utility"
+    Language="1033"
+    Version="1.0.0.0"
+    Manufacturer="Kyle Serrano"
+    UpgradeCode="bc632166-d52e-4b43-9418-5fb6a1fd2a61">
+
+    <!-- Package metadata -->
+    <Package
+      InstallerVersion="500"
+      Compressed="yes"
+      InstallScope="perMachine" />
+
+    <!-- Allow major upgrades -->
+    <MajorUpgrade
+      DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <MediaTemplate />
+
+    <!-- Public properties -->
+    <Property Id="INSTALLDIR" Secure="yes" />
+    <Property Id="DESKTOP_SHORTCUT" Value="0" Secure="yes" />
+
+    <!-- Directory structure -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="DirectoryCopyUtility" />
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ProgramMenuDir" Name="Directory Copy Utility" />
+      </Directory>
+
+      <Directory Id="DesktopFolder" />
+    </Directory>
+
+    <!-- Set INSTALLFOLDER from INSTALLDIR if provided -->
+    <SetDirectory Id="INSTALLFOLDER" Value="[INSTALLDIR]">
+      INSTALLDIR
+    </SetDirectory>
+
+    <!-- Components -->
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="MainExeComponent" Guid="69b893fc-19bd-4d04-9948-3d249485ca22">
+        <File Id="CopyExe" Source="CopyWithGUI.exe" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Start Menu shortcut -->
+    <DirectoryRef Id="ProgramMenuDir">
+      <Component Id="ProgramMenuShortcutComponent" Guid="*">
+        <Shortcut
+          Id="ProgramMenuShortcut"
+          Name="Directory Copy Utility"
+          Description="Incremental directory copy tool with checksum validation"
+          Target="[INSTALLFOLDER]CopyWithGUI.exe"
+          WorkingDirectory="INSTALLFOLDER" />
+
+        <RemoveFolder Id="RemoveProgramMenuDir" On="uninstall" />
+
+        <RegistryValue
+          Root="HKCU"
+          Key="Software\[Manufacturer]\[ProductName]"
+          Name="installed"
+          Type="integer"
+          Value="1"
+          KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Desktop shortcut (optional) -->
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="DesktopShortcutComponent" Guid="*">
+        <Condition>DESKTOP_SHORTCUT = "1"</Condition>
+
+        <Shortcut
+          Id="DesktopShortcut"
+          Name="Directory Copy Utility"
+          Description="Incremental directory copy tool with checksum validation"
+          Target="[INSTALLFOLDER]CopyWithGUI.exe"
+          WorkingDirectory="INSTALLFOLDER" />
+
+        <RegistryValue
+          Root="HKCU"
+          Key="Software\[Manufacturer]\[ProductName]"
+          Name="desktopshortcut"
+          Type="integer"
+          Value="1"
+          KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Features -->
+    <Feature Id="MainFeature" Title="Directory Copy Utility" Level="1">
+      <ComponentRef Id="MainExeComponent" />
+      <ComponentRef Id="ProgramMenuShortcutComponent" />
+      <ComponentRef Id="DesktopShortcutComponent" />
+    </Feature>
+
+  </Product>
+</Wix>
