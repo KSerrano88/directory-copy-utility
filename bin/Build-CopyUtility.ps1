@@ -1,6 +1,6 @@
 param(
     [string]$SourceScript = ".\CopyWithGUI.ps1",
-    [string]$OutputExe    = ".\CopyWithGUI.exe",
+    [string]$OutputExe    = "..\CopyWithGUI.exe",
     [string]$IconPath     = ".\copyutil.ico"   # optional, can be blank or removed
 )
 

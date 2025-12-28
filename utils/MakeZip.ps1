@@ -3,10 +3,10 @@ param(
 )
 
 $projectRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
-$srcPath = Join-Path $projectRoot "src"
+$binPath = Join-Path $projectRoot "bin"
 
-if (-not (Test-Path $srcPath)) {
-    Write-Host "ERROR: src folder not found." -ForegroundColor Red
+if (-not (Test-Path $binPath)) {
+    Write-Host "ERROR: bin folder not found." -ForegroundColor Red
     exit 1
 }
 
@@ -15,7 +15,7 @@ Write-Host "Creating ZIP package..." -ForegroundColor Cyan
 $itemsToZip = @(
     (Join-Path $projectRoot "README.md"),
     (Join-Path $projectRoot ".gitignore"),
-    $srcPath
+    $binPath
 )
 
 if (Test-Path $Output) {
