@@ -24,6 +24,7 @@
     <!-- Public properties -->
     <Property Id="INSTALLDIR" Secure="yes" />
     <Property Id="DESKTOP_SHORTCUT" Value="0" Secure="yes" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 
     <!-- Directory structure -->
     <Directory Id="TARGETDIR" Name="SourceDir">
@@ -46,7 +47,7 @@
     <!-- Components -->
     <DirectoryRef Id="INSTALLFOLDER">
       <Component Id="MainExeComponent" Guid="69b893fc-19bd-4d04-9948-3d249485ca22">
-        <File Id="CopyExe" Source="CopyWithGUI.exe" KeyPath="yes" />
+        <File Id="CopyExe" Source="$(var.CopyExePath)" KeyPath="yes" />
       </Component>
     </DirectoryRef>
 
@@ -100,6 +101,8 @@
       <ComponentRef Id="ProgramMenuShortcutComponent" />
       <ComponentRef Id="DesktopShortcutComponent" />
     </Feature>
+
+    <UIRef Id="WixUI_InstallDir" />
 
   </Product>
 </Wix>

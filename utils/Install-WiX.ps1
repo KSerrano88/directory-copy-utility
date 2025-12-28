@@ -16,6 +16,7 @@ Start-Process -FilePath $installer -ArgumentList "/quiet" -Wait
 if (-not ($env:PATH -split ";" | Where-Object { $_ -eq $wixPath })) {
     Write-Host "Adding WiX to PATH..." -ForegroundColor Cyan
     setx PATH "$env:PATH;$wixPath" | Out-Null
+    $env:PATH += ";$wixPath"
 }
 
 Write-Host "Verifying installation..." -ForegroundColor Cyan
@@ -25,8 +26,8 @@ $foundLight  = Get-Command light.exe -ErrorAction SilentlyContinue
 
 if ($foundCandle -and $foundLight) {
     Write-Host "WiX installed successfully and is on PATH." -ForegroundColor Green
-    Write-Host "candle.exe → $($foundCandle.Source)"
-    Write-Host "light.exe  → $($foundLight.Source)"
+    Write-Host "candle.exe -> $($foundCandle.Source)"
+    Write-Host "light.exe  -> $($foundLight.Source)"
 }
 else {
     Write-Host "WiX installed, but PATH may not be updated yet." -ForegroundColor Yellow
